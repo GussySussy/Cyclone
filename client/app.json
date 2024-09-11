@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "client",
-    "slug": "client",
+    "slug": "cyclone",
     "scheme": "cyclone-scheme",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -24,6 +24,15 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-font", "expo-router"]
+    "plugins": ["expo-font", "expo-router"],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "fa3e3abb-25f4-441c-9027-45e3378881ec"
+      }
+    },
+    "owner": "nyangus"
   }
 }
