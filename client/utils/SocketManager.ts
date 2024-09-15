@@ -6,6 +6,7 @@ enum socket_events {
   JOIN_ROOM = "join_room",
   CREATE_ROOM = "create_room",
   EXIT_ROOM = "exit_room",
+  GET_PLAYERS = "get_players",
 }
 
 interface Response<T = any> {
@@ -23,7 +24,7 @@ export class SocketManager {
 
   public static getInstance(): Socket {
     if (!SocketManager.instance) {
-      SocketManager.instance = io("http://192.168.29.44:5174");
+      SocketManager.instance = io("http://192.168.0.109:5174");
 
       SocketManager.instance.on("connect", () => {
         console.log(`Connected with id: ${SocketManager.instance?.id}`);
@@ -102,4 +103,20 @@ export class SocketManager {
   };
 
   public static sendMessage = (message: string) => {};
+
+  public static getPlayers = (): Promise<any> => {
+    return new Promise((resolve, reject) => {
+      SocketManager.instance!.emit(
+        socket_events.GET_PLAYERS,
+        SocketManager.room_code,
+        (response: Response) => {
+          if (response.status === "OK") {
+            resolve(response.data);
+          } else {
+            reject(new Error(response.message || "Failed to get player list"));
+          }
+        }
+      );
+    });
+  };
 }
