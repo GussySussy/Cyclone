@@ -68,10 +68,15 @@ export const handleRoomEvents = (socket: Socket) => {
     const room = RoomManager.getRoom(room_code);
     if (room) {
       const players = room.getPlayers();
+      console.log(
+        "Successfully retrieved and sent lobby player list...",
+        players
+      );
       callback(
         createSuccessResponse(players, "OK : Player information received")
       );
     } else {
+      console.log("Could not retrieve and send lobby player list...");
       callback(
         createErrorResponse("ERROR : Could not retrieve player information")
       );

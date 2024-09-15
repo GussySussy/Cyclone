@@ -31,5 +31,7 @@ export class Room {
     return this.players.length;
   }
 
-  public getPlayers = () => Object.values(this.players);
+  public getPlayers = () => {
+    return Object.values(this.players);
+  };
 }
