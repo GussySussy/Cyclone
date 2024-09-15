@@ -8,6 +8,9 @@ enum room_events {
   EXIT_ROOM = "exit_room",
   GET_PLAYERS = "get_players",
   START_GAME = "start_game",
+  SEND_MESSAGE = "send_message",
+  RECEIVE_MESSAGE = "receive_message",
+  UPDATE_PLAYERS = "update_players",
 }
 
 export const handleRoomEvents = (socket: Socket) => {
@@ -72,9 +75,7 @@ export const handleRoomEvents = (socket: Socket) => {
         "Successfully retrieved and sent lobby player list...",
         players
       );
-      callback(
-        createSuccessResponse(players, "OK : Player information received")
-      );
+      callback(createSuccessResponse(players, "OK : Player information sent"));
     } else {
       console.log("Could not retrieve and send lobby player list...");
       callback(
@@ -82,4 +83,22 @@ export const handleRoomEvents = (socket: Socket) => {
       );
     }
   });
+
+  socket.on(
+    room_events.SEND_MESSAGE,
+    (room_code: string, message: string, callback) => {
+      const room = RoomManager.getRoom(room_code);
+      if (room) {
+        console.log("Successfully sent message");
+        socket.to(room.room_code).emit("receive_message", {
+          nickname: room.getPlayer(socket.id).nickname,
+          message: message,
+        });
+        callback(createSuccessResponse({}, "OK : Message sent"));
+      } else {
+        console.log("Could not send message");
+        callback(createErrorResponse("ERROR : Could not send message"));
+      }
+    }
+  );
 };

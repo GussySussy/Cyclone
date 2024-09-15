@@ -38,6 +38,7 @@ export class RoomManager {
     if (room) {
       room.removePlayer(socket.id);
       socket.leave(room_code);
+      socket.to(room_code).emit("update_players", room.getPlayers());
       return true;
     } else {
       return false;

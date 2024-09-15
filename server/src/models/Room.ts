@@ -34,4 +34,11 @@ export class Room {
   public getPlayers = () => {
     return Object.values(this.players);
   };
+
+  public getPlayer(socket_id: string): Player {
+    const player: Player = this.players.find(
+      (player) => player.socket_id == socket_id
+    )!;
+    return player;
+  }
 }
