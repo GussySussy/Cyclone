@@ -83,4 +83,22 @@ export const handleRoomEvents = (socket: Socket) => {
       );
     }
   });
+
+  socket.on(
+    room_events.SEND_MESSAGE,
+    (room_code: string, message: string, callback) => {
+      const room = RoomManager.getRoom(room_code);
+      if (room) {
+        console.log("Successfully sent message");
+        socket.to(room.room_code).emit("receive_message", {
+          nickname: room.getPlayer(socket.id).nickname,
+          message: message,
+        });
+        callback(createSuccessResponse({}, "OK : Message sent"));
+      } else {
+        console.log("Could not send message");
+        callback(createErrorResponse("ERROR : Could not send message"));
+      }
+    }
+  );
 };
